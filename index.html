@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ALESE CDA Finance Manager</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="logo-section">
+        <img src="./assets/logo.png" alt="CDA Logo" class="logo" />
+        <h1 class="brand-name">ALESE CDA</h1>
+      </div>
+      <div class="nav-links">
+        <button class="btn" onclick="notAdminAlert()">
+          Register New Member
+        </button>
+        <button class="btn" onclick="notAdminAlert()">
+          Record a Transaction
+        </button>
+        <button class="btn btn-admin" onclick="showLogin()">
+          Admin Sign In
+        </button>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+      <div class="hero-overlay">
+        <h2>Empowering Our Community Through Transparency and Service</h2>
+        <p>
+          Track CDA levies, donations, and special projects with ease and trust.
+        </p>
+      </div>
+    </header>
+
+    <!-- Announcements -->
+    <section class="announcements">
+      <h3>Community Announcements</h3>
+      <ul>
+        <li>🎉 Town Hall Meeting on Saturday 10th</li>
+        <li>🛠 Special Project: Road Repairs begin next week</li>
+      </ul>
+    </section>
+
+    <!-- Contact Us -->
+    <section class="contact-us">
+      <h3>Contact Us</h3>
+      <p>Email: info@alese-cda.org</p>
+      <p>Phone: +234 800 123 4567</p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>&copy; 2025 ALESE CDA. All rights reserved.</p>
+      <div class="social-icons">
+        <a href="#"><img src="images/facebook.png" alt="Facebook" /></a>
+        <a href="#"><img src="images/whatsapp.png" alt="WhatsApp" /></a>
+        <a href="#"><img src="images/instagram.png" alt="Instagram" /></a>
+      </div>
+    </footer>
+    <script>
+      function notAdminAlert() {
+        if (!localStorage.getItem("isAdmin")) {
+          Swal.fire({
+            icon: "warning",
+            title: "Access Denied",
+            text: "You can only carry out this function when signed in as an admin",
+          });
+        } else {
+          Swal.fire("Access granted. Proceed to form...");
+          // TODO: Open the respective form modals here
+        }
+      }
+
+      function showLogin() {
+        document.getElementById("admin-login-modal").style.display = "flex";
+      }
+
+      function closeLoginModal() {
+        document.getElementById("admin-login-modal").style.display = "none";
+      }
+
+      function adminLogin() {
+        const username = document.getElementById("admin-username").value;
+        const password = document.getElementById("admin-password").value;
+
+        fetch(
+          "https://script.google.com/macros/s/AKfycbwApkZ0iuWuUIPkQvWBpKG_E4IO4o3viYZxH_tEW4XDORVQv96E3pq1EoNCX5LLAIxd/exec",
+          {
+            method: "POST",
+            body: JSON.stringify({ username, password }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then((response) => {
+            if (response.success) {
+              localStorage.setItem("isAdmin", "true");
+              Swal.fire({
+                icon: "success",
+                title: "Login successful",
+              }).then(() => {
+                closeLoginModal();
+              });
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Login failed",
+                text: response.message,
+              });
+            }
+          })
+          .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Network error",
+              text: "Could not connect to server",
+            });
+            console.error(err);
+          });
+      }
+
+      // Optional: Auto hide login modal if admin is already logged in
+      window.onload = function () {
+        if (localStorage.getItem("isAdmin")) {
+          console.log("Admin session active");
+        }
+      };
+    </script>
+    <!-- Admin Login Modal -->
+    <div id="admin-login-modal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeLoginModal()">&times;</span>
+        <h2>Admin Sign In</h2>
+        <input type="text" id="admin-username" placeholder="Username" />
+        <input type="password" id="admin-password" placeholder="Password" />
+        <button onclick="adminLogin()">Login</button>
+      </div>
+    </div>
+  </body>
+</html>
