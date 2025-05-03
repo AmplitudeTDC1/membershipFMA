@@ -95,26 +95,24 @@
         const username = document.getElementById("admin-username").value;
         const password = document.getElementById("admin-password").value;
 
+        const data = new URLSearchParams();
+        data.append("username", username);
+        data.append("password", password);
+
         fetch(
           "https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec",
           {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: JSON.stringify({ username, password }),
+            body: data.toString(),
           }
         )
           .then((res) => res.json())
           .then((response) => {
             if (response.success) {
-              localStorage.setItem("isAdmin", "true");
-              Swal.fire({
-                icon: "success",
-                title: "Login successful",
-              }).then(() => {
-                closeLoginModal();
-              });
+              Swal.fire({ icon: "success", title: "Login successful" });
             } else {
               Swal.fire({
                 icon: "error",
@@ -126,7 +124,7 @@
           .catch((err) => {
             Swal.fire({
               icon: "error",
-              title: "Network error",
+              title: "Network Error",
               text: "Could not connect to server",
             });
             console.error(err);
