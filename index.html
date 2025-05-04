@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ALESE CDA Finance Manager</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="./css/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
@@ -15,15 +15,16 @@
         <h1 class="brand-name">ALESE CDA</h1>
       </div>
       <div class="nav-links">
-        <button class="btn" onclick="notAdminAlert()">
-          Register New Member
-        </button>
-        <button class="btn" onclick="notAdminAlert()">
-          Record a Transaction
-        </button>
-        <button class="btn btn-admin" onclick="showLogin()">
-          Admin Sign In
-        </button>
+        <button class="btn" id="register-btn">Register New Member</button>
+        <button class="btn" id="transaction-btn">Record a Transaction</button>
+
+        <!-- Admin-only panel -->
+        <div id="admin-panel" style="display: none">
+          <span id="admin-name" class="admin-name"></span>
+          <button id="logout-btn" class="btn btn-logout">Logout</button>
+        </div>
+
+        <button class="btn btn-admin" id="login-btn">Admin Sign In</button>
       </div>
     </nav>
 
@@ -36,13 +37,6 @@
         </p>
       </div>
     </header>
-
-    <!-- <iframe
-      src="https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec"
-      width="100%"
-      height="300"
-      style="border: none"
-    ></iframe> -->
 
     <!-- Announcements -->
     <section class="announcements">
@@ -69,84 +63,73 @@
         <a href="#"><img src="images/instagram.png" alt="Instagram" /></a>
       </div>
     </footer>
-    <script>
-      function notAdminAlert() {
-        if (!localStorage.getItem("isAdmin")) {
-          Swal.fire({
-            icon: "warning",
-            title: "Access Denied",
-            text: "You can only carry out this function when signed in as an admin",
-          });
-        } else {
-          Swal.fire("Access granted. Proceed to form...");
-          // TODO: Open the respective form modals here
-        }
-      }
 
-      function showLogin() {
-        document.getElementById("admin-login-modal").style.display = "flex";
-      }
-
-      function closeLoginModal() {
-        document.getElementById("admin-login-modal").style.display = "none";
-      }
-
-      function adminLogin() {
-        const username = document.getElementById("admin-username").value;
-        const password = document.getElementById("admin-password").value;
-
-        const data = new URLSearchParams();
-        data.append("username", username);
-        data.append("password", password);
-
-        fetch(
-          "https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: data.toString(),
-          }
-        )
-          .then((res) => res.json())
-          .then((response) => {
-            if (response.success) {
-              Swal.fire({ icon: "success", title: "Login successful" });
-            } else {
-              Swal.fire({
-                icon: "error",
-                title: "Login failed",
-                text: response.message,
-              });
-            }
-          })
-          .catch((err) => {
-            Swal.fire({
-              icon: "error",
-              title: "Network Error",
-              text: "Could not connect to server",
-            });
-            console.error(err);
-          });
-      }
-
-      // Optional: Auto hide login modal if admin is already logged in
-      window.onload = function () {
-        if (localStorage.getItem("isAdmin")) {
-          console.log("Admin session active");
-        }
-      };
-    </script>
     <!-- Admin Login Modal -->
     <div id="admin-login-modal" class="modal">
       <div class="modal-content">
-        <span class="close" onclick="closeLoginModal()">&times;</span>
+        <span class="close" id="modal-close">&times;</span>
         <h2>Admin Sign In</h2>
         <input type="text" id="admin-username" placeholder="Username" />
         <input type="password" id="admin-password" placeholder="Password" />
-        <button onclick="adminLogin()">Login</button>
+        <button id="login-submit">Login</button>
       </div>
     </div>
+
+    <!-- Main App Script -->
+    <script type="module">
+      import {
+        notAdminAlert,
+        showLogin,
+        closeLoginModal,
+        adminLogin,
+        isAdminLoggedIn,
+        getAdminUsername,
+        logoutAdmin,
+      } from "./js/auth.js";
+
+      // Make functions globally accessible
+      window.notAdminAlert = notAdminAlert;
+      window.showLogin = showLogin;
+      window.closeLoginModal = closeLoginModal;
+      window.adminLogin = adminLogin;
+      window.logoutAdmin = logoutAdmin;
+
+      window.onload = () => {
+        // Show admin panel if logged in
+        if (isAdminLoggedIn()) {
+          document.getElementById("admin-panel").style.display = "flex";
+          document.getElementById("admin-name").textContent =
+            getAdminUsername();
+          document.getElementById("login-btn").style.display = "none";
+        }
+
+        // Attach navigation button events
+        document
+          .getElementById("register-btn")
+          .addEventListener("click", notAdminAlert);
+        document
+          .getElementById("transaction-btn")
+          .addEventListener("click", notAdminAlert);
+
+        // Attach login button event
+        document
+          .getElementById("login-btn")
+          .addEventListener("click", showLogin);
+
+        // Modal close
+        document
+          .getElementById("modal-close")
+          .addEventListener("click", closeLoginModal);
+
+        // Login submit
+        document
+          .getElementById("login-submit")
+          .addEventListener("click", adminLogin);
+
+        // Logout button
+        const logoutBtn = document.getElementById("logout-btn");
+        if (logoutBtn) logoutBtn.addEventListener("click", logoutAdmin);
+      };
+    </script>
   </body>
 </html>
