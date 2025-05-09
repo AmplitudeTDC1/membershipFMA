@@ -5,26 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ALESE CDA Finance Manager</title>
     <link rel="stylesheet" href="./css/style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
   </head>
+
   <body>
     <!-- Navbar -->
-    <nav class="navbar">
+    <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="logo-section">
-        <img src="./assets/logo.png" alt="CDA Logo" class="logo" />
+        <img src="./assets/logo.png" alt="ALESE CDA Logo" class="logo" />
         <h1 class="brand-name">ALESE CDA</h1>
       </div>
-      <div class="nav-links">
-        <button class="btn" id="register-btn">Register New Member</button>
-        <button class="btn" id="transaction-btn">Record a Transaction</button>
-
-        <!-- Admin-only panel -->
-        <div id="admin-panel" style="display: none">
-          <span id="admin-name" class="admin-name"></span>
-          <button id="logout-btn" class="btn btn-logout">Logout</button>
+      <div class="topbar">
+        <h2 id="admin-welcome" style="display: none"></h2>
+        <div class="nav-links actions">
+          <button
+            class="btn"
+            onclick="handleAdminAction('register-member-modal')"
+          >
+            Register New Member
+          </button>
+          <button class="btn" onclick="handleAdminAction('transaction-modal')">
+            Record a Transaction
+          </button>
+          <button class="btn" onclick="logoutAdmin()">Logout</button>
         </div>
-
-        <button class="btn btn-admin" id="login-btn">Admin Sign In</button>
       </div>
     </nav>
 
@@ -38,44 +42,152 @@
       </div>
     </header>
 
-    <!-- Announcements -->
-    <section class="announcements">
-      <h3>Community Announcements</h3>
-      <ul>
-        <li>🎉 Town Hall Meeting on Saturday 10th</li>
-        <li>🛠 Special Project: Road Repairs begin next week</li>
-      </ul>
-    </section>
+    <!-- Main Content -->
+    <main>
+      <!-- Announcements -->
+      <section class="announcements" aria-labelledby="announcements-title">
+        <h3 id="announcements-title">Community Announcements</h3>
+        <ul>
+          <li>🎉 Town Hall Meeting on Saturday 10th</li>
+          <li>🛠 Special Project: Road Repairs begin next week</li>
+        </ul>
+      </section>
 
-    <!-- Contact Us -->
-    <section class="contact-us">
-      <h3>Contact Us</h3>
-      <p>Email: info@alese-cda.org</p>
-      <p>Phone: +234 800 123 4567</p>
-    </section>
+      <!-- Contact Us -->
+      <section class="contact-us" aria-labelledby="contact-title">
+        <h3 id="contact-title">Contact Us</h3>
+        <p>Email: <a href="mailto:info@alese-cda.org">info@alese-cda.org</a></p>
+        <p>Phone: <a href="tel:+2348001234567">+234 800 123 4567</a></p>
+      </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
       <p>&copy; 2025 ALESE CDA. All rights reserved.</p>
       <div class="social-icons">
-        <a href="#"><img src="images/facebook.png" alt="Facebook" /></a>
-        <a href="#"><img src="images/whatsapp.png" alt="WhatsApp" /></a>
-        <a href="#"><img src="images/instagram.png" alt="Instagram" /></a>
+        <a href="#" aria-label="Facebook"
+          ><img src="images/facebook.png" alt="Facebook"
+        /></a>
+        <a href="#" aria-label="WhatsApp"
+          ><img src="images/whatsapp.png" alt="WhatsApp"
+        /></a>
+        <a href="#" aria-label="Instagram"
+          ><img src="images/instagram.png" alt="Instagram"
+        /></a>
       </div>
     </footer>
 
     <!-- Admin Login Modal -->
-    <div id="admin-login-modal" class="modal">
+    <div
+      id="admin-login-modal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="admin-login-title"
+    >
       <div class="modal-content">
-        <span class="close" id="modal-close">&times;</span>
-        <h2>Admin Sign In</h2>
-        <input type="text" id="admin-username" placeholder="Username" />
-        <input type="password" id="admin-password" placeholder="Password" />
-        <button id="login-submit">Login</button>
+        <span
+          class="close"
+          id="modal-close"
+          role="button"
+          aria-label="Close Login Modal"
+          >&times;</span
+        >
+        <h2 id="admin-login-title">Admin Sign In</h2>
+        <input
+          type="text"
+          id="admin-username"
+          placeholder="Username"
+          required
+        />
+        <input
+          type="password"
+          id="admin-password"
+          placeholder="Password"
+          required
+        />
+        <button id="login-submit" class="btn">Login</button>
       </div>
     </div>
 
-    <!-- Main App Script -->
+    <!-- Register Member Modal -->
+    <div
+      id="register-member-modal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="register-member-title"
+    >
+      <div class="modal-content">
+        <span
+          class="close"
+          onclick="closeModal('register-member-modal')"
+          role="button"
+          aria-label="Close Register Modal"
+          >&times;</span
+        >
+        <h2 id="register-member-title">Register New Member</h2>
+        <form id="register-member-form">
+          <input
+            type="text"
+            id="member-name"
+            placeholder="Full Name"
+            required
+          />
+          <input type="email" id="member-email" placeholder="Email" required />
+          <input
+            type="text"
+            id="member-phone"
+            placeholder="Phone Number"
+            required
+          />
+          <button type="submit" class="btn">Register</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Transaction Modal -->
+    <div
+      id="transaction-modal"
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="transaction-title"
+    >
+      <div class="modal-content">
+        <span
+          class="close"
+          onclick="closeModal('transaction-modal')"
+          role="button"
+          aria-label="Close Transaction Modal"
+          >&times;</span
+        >
+        <h2 id="transaction-title">Record a Transaction</h2>
+        <form id="record-transaction-form">
+          <input
+            type="text"
+            id="transaction-member-name"
+            placeholder="Member Name"
+            required
+          />
+          <input
+            type="number"
+            id="transaction-amount"
+            placeholder="Amount"
+            required
+          />
+          <select id="transaction-type" required>
+            <option value="">Select Type</option>
+            <option value="levy">Levy</option>
+            <option value="donation">Donation</option>
+            <option value="project">Project</option>
+          </select>
+          <button type="submit" class="btn">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- App Script -->
     <script type="module">
       import {
         notAdminAlert,
@@ -87,49 +199,37 @@
         logoutAdmin,
       } from "./js/auth.js";
 
-      // Make functions globally accessible
+      // Expose globally
       window.notAdminAlert = notAdminAlert;
       window.showLogin = showLogin;
       window.closeLoginModal = closeLoginModal;
       window.adminLogin = adminLogin;
       window.logoutAdmin = logoutAdmin;
 
-      window.onload = () => {
-        // Show admin panel if logged in
-        if (isAdminLoggedIn()) {
-          document.getElementById("admin-panel").style.display = "flex";
-          document.getElementById("admin-name").textContent =
-            getAdminUsername();
-          document.getElementById("login-btn").style.display = "none";
-        }
+      window.handleAdminAction = function (modalId) {
+        notAdminAlert(modalId);
+      };
 
-        // Attach navigation button events
-        document
-          .getElementById("register-btn")
-          .addEventListener("click", notAdminAlert);
-        document
-          .getElementById("transaction-btn")
-          .addEventListener("click", notAdminAlert);
-
-        // Attach login button event
-        document
-          .getElementById("login-btn")
-          .addEventListener("click", showLogin);
-
-        // Modal close
-        document
-          .getElementById("modal-close")
-          .addEventListener("click", closeLoginModal);
-
-        // Login submit
+      window.addEventListener("DOMContentLoaded", () => {
         document
           .getElementById("login-submit")
-          .addEventListener("click", adminLogin);
+          .addEventListener("click", () => adminLogin());
 
-        // Logout button
-        const logoutBtn = document.getElementById("logout-btn");
-        if (logoutBtn) logoutBtn.addEventListener("click", logoutAdmin);
-      };
+        document.querySelectorAll(".modal .close").forEach((el) =>
+          el.addEventListener("click", () => {
+            el.closest(".modal").style.display = "none";
+          })
+        );
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const actionType = urlParams.get("action");
+        if (actionType === "register") {
+          document.getElementById("register-member-modal").style.display =
+            "block";
+        } else if (actionType === "transaction") {
+          document.getElementById("transaction-modal").style.display = "block";
+        }
+      });
     </script>
   </body>
 </html>
