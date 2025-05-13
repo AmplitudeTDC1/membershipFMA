@@ -37,6 +37,7 @@ export function adminLogin() {
   const password = document.getElementById("admin-password").value;
 
   const data = new URLSearchParams();
+  data.append("action", "login"); // ✅ REQUIRED
   data.append("username", username);
   data.append("password", password);
 
@@ -54,7 +55,7 @@ export function adminLogin() {
     .then((response) => {
       if (response.success) {
         setAdminSession();
-        localStorage.setItem("adminUsername", username); // Optional display
+        localStorage.setItem("adminUsername", username);
 
         Swal.fire({
           icon: "success",
@@ -102,12 +103,21 @@ export function isAdminLoggedIn() {
 
 // Logout admin
 export function logoutAdmin() {
-  localStorage.removeItem("adminSession");
-  localStorage.removeItem("adminUsername");
-  sessionStorage.clear();
+  // Show SweetAlert logout success
+  Swal.fire({
+    icon: "success",
+    title: "Logout successful",
+    showConfirmButton: false,
+    timer: 1500,
+  }).then(() => {
+    // Perform cleanup after alert
+    localStorage.removeItem("adminSession");
+    localStorage.removeItem("adminUsername");
+    sessionStorage.clear();
 
-  // Immediately redirect after cleanup
-  window.location.href = "index.html";
+    // Redirect after cleanup
+    window.location.href = "index.html";
+  });
 }
 
 // Set admin session with expiration
@@ -120,6 +130,19 @@ export function setAdminSession() {
     expiresIn: SESSION_DURATION,
   };
   localStorage.setItem("adminSession", JSON.stringify(session));
+}
+
+export function refreshAdminSessionOnActivity() {
+  const activityEvents = ["click", "keydown", "mousemove", "scroll"];
+  activityEvents.forEach((event) =>
+    document.addEventListener(event, () => {
+      const session = JSON.parse(localStorage.getItem("adminSession"));
+      if (session) {
+        session.loginTime = Date.now(); // ⏱ Refresh timestamp
+        localStorage.setItem("adminSession", JSON.stringify(session));
+      }
+    })
+  );
 }
 
 // Check if session expired and auto-logout
