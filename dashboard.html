@@ -163,6 +163,16 @@
                 </tr>
               </thead>
               <tbody id="member-table"></tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="5">
+                    <div
+                      class="d-flex justify-content-between align-items-center mt-3"
+                      id="member-pagination"
+                    ></div>
+                  </td>
+                </tr>
+              </tfoot>
             </table>
           </div>
         </div>
@@ -189,13 +199,24 @@
               <thead>
                 <tr>
                   <th>Transaction ID</th>
-                  <th>Member</th>
+                  <th>Member ID</th>
                   <th>Address</th>
                   <th>Amount</th>
+                  <th>Payment Purpose</th>
                   <th>Date</th>
                 </tr>
               </thead>
               <tbody id="transaction-table"></tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="6">
+                    <div
+                      class="d-flex justify-content-between align-items-center mt-3"
+                      id="transaction-pagination"
+                    ></div>
+                  </td>
+                </tr>
+              </tfoot>
             </table>
           </div>
         </div>
@@ -235,10 +256,20 @@
                 </div>
                 <div class="col-md-6">
                   <input
+                    type="tel"
                     class="form-control"
                     name="phone"
                     placeholder="Phone Number"
                     required
+                    pattern="(\+234|0)[7-9][0-1]\d{8}"
+                    title="Enter a valid Nigerian phone number e.g. 08012345678 or +2348012345678"
+                  />
+                </div>
+                <div class="col-md-6">
+                  <input
+                    class="form-control"
+                    name="email"
+                    placeholder="Email Address"
                   />
                 </div>
                 <div class="col-md-6">
@@ -307,79 +338,170 @@
               data-bs-dismiss="modal"
             ></button>
           </div>
+
           <div class="modal-body">
             <form id="recordTransactionForm">
               <div class="row g-3">
+                <!-- Transaction ID -->
                 <div class="col-md-6">
+                  <label for="transactionId" class="form-label"
+                    >Transaction ID</label
+                  >
                   <input
-                    class="form-control"
+                    type="text"
                     name="transactionId"
-                    placeholder="Transaction ID"
-                    required
-                  />
-                </div>
-                <div class="col-md-6">
-                  <input
-                    type="date"
+                    id="transactionId"
                     class="form-control"
-                    name="transactionDate"
-                    required
+                    readonly
                   />
                 </div>
+
+                <!-- Transaction Date -->
                 <div class="col-md-6">
+                  <label for="transactionDate" class="form-label"
+                    >Transaction Date</label
+                  >
+                  <input
+                    type="text"
+                    name="transactionDate"
+                    id="transactionDate"
+                    class="form-control"
+                    readonly
+                  />
+                </div>
+
+                <!-- Residential Address -->
+                <div class="col-md-6">
+                  <label for="residentialAddress" class="form-label"
+                    >Residential Address</label
+                  >
                   <select
                     class="form-select"
                     name="residentialAddress"
+                    id="residentialAddress"
                     required
                   >
                     <option value="">Select Address</option>
                   </select>
                 </div>
+
+                <!-- Member ID -->
                 <div class="col-md-6">
+                  <label for="memberId" class="form-label">Member ID</label>
                   <input
-                    class="form-control"
+                    type="text"
                     name="memberId"
-                    placeholder="Member ID"
+                    id="memberId"
+                    class="form-control"
                     readonly
                   />
                 </div>
+
+                <!-- Amount -->
                 <div class="col-md-6">
+                  <label for="amount" class="form-label">Amount (₦)</label>
                   <input
                     type="number"
-                    class="form-control"
                     name="amount"
-                    placeholder="Amount"
+                    id="amount"
+                    class="form-control"
                     required
                   />
                 </div>
+
+                <!-- Payment Purpose -->
                 <div class="col-md-6">
-                  <select class="form-select" name="paymentPurpose" required>
+                  <label for="paymentPurpose" class="form-label"
+                    >Payment Purpose</label
+                  >
+                  <select
+                    name="paymentPurpose"
+                    id="paymentPurpose"
+                    class="form-select"
+                    required
+                  >
                     <option value="">Select Purpose</option>
                   </select>
                 </div>
+
+                <!-- Payment Type -->
                 <div class="col-md-6">
-                  <select class="form-select" name="paymentType" required>
+                  <label for="modeOfPayment" class="form-label"
+                    >Mode of Payment</label
+                  >
+                  <select
+                    name="paymentType"
+                    id="paymentType"
+                    class="form-select"
+                    required
+                  >
                     <option value="">Select Type</option>
                   </select>
                 </div>
+
+                <!-- From Month -->
                 <div class="col-md-6">
-                  <select class="form-select" name="fromMonth" required>
-                    <option value="">From Month</option>
-                  </select>
-                </div>
-                <div class="col-md-6">
-                  <select class="form-select" name="toMonth" required>
-                    <option value="">To Month</option>
-                  </select>
-                </div>
-                <div class="col-12">
-                  <textarea
+                  <label for="fromMonth" class="form-label">From Month</label>
+                  <input
+                    type="month"
+                    name="fromMonth"
+                    id="fromMonth"
                     class="form-control"
+                    required
+                  />
+                </div>
+
+                <!-- To Month -->
+                <div class="col-md-6">
+                  <label for="toMonth" class="form-label">To Month</label>
+                  <input
+                    type="month"
+                    name="toMonth"
+                    id="toMonth"
+                    class="form-control"
+                    required
+                  />
+                </div>
+
+                <!-- Duration (calculated) -->
+                <div class="col-md-6">
+                  <label for="durationMonths" class="form-label"
+                    >Duration (Months)</label
+                  >
+                  <input
+                    type="text"
+                    name="durationMonths"
+                    id="durationMonths"
+                    class="form-control"
+                    readonly
+                  />
+                </div>
+
+                <!-- Recorded By -->
+                <div class="col-md-6">
+                  <label for="recordedBy" class="form-label">Recorded By</label>
+                  <input
+                    type="text"
+                    name="recordedBy"
+                    id="recordedBy"
+                    class="form-control"
+                    readonly
+                  />
+                </div>
+
+                <!-- Notes -->
+                <div class="col-12">
+                  <label for="notes" class="form-label">Notes</label>
+                  <textarea
                     name="notes"
-                    placeholder="Notes"
+                    id="notes"
+                    class="form-control"
+                    rows="3"
+                    placeholder="Optional remarks..."
                   ></textarea>
                 </div>
               </div>
+
               <div class="modal-footer mt-3">
                 <button type="submit" class="btn btn-success">
                   Submit Transaction
@@ -390,45 +512,270 @@
         </div>
       </div>
     </div>
-
-    <!-- Authentication and session check -->
     <script type="module">
       import {
         isAdminLoggedIn,
         getAdminUsername,
         logoutAdmin,
+        refreshAdminSessionOnActivity,
       } from "./js/auth.js";
 
-      window.addEventListener("DOMContentLoaded", () => {
+      document.addEventListener("DOMContentLoaded", () => {
+        // ✅ AUTH CHECK
         if (!isAdminLoggedIn()) {
           window.location.href = "index.html";
           return;
         }
 
-        document.getElementById("username").textContent = getAdminUsername();
+        // ✅ Populate Admin Name
+        const username = getAdminUsername();
+        const usernameEl = document.getElementById("username");
+        if (usernameEl) usernameEl.textContent = username;
 
-        document.getElementById("logout-btn").addEventListener("click", () => {
-          logoutAdmin();
+        const recordedByField = document.getElementById("recordedBy");
+        if (recordedByField) recordedByField.value = username;
+
+        // ✅ LOGOUT
+        document.getElementById("logout-btn")?.addEventListener("click", () => {
+          Swal.fire({
+            icon: "success",
+            title: "Logout successful",
+            showConfirmButton: false,
+            timer: 1200,
+          }).then(() => {
+            logoutAdmin();
+          });
         });
 
+        // ✅ MODALS
         document
           .getElementById("register-btn")
-          .addEventListener("click", () => {
-            const modal = new bootstrap.Modal(
+          ?.addEventListener("click", () => {
+            new bootstrap.Modal(
               document.getElementById("registerMemberModal")
-            );
-            modal.show();
+            ).show();
           });
 
         document
           .getElementById("transaction-btn")
-          .addEventListener("click", () => {
-            const modal = new bootstrap.Modal(
+          ?.addEventListener("click", () => {
+            new bootstrap.Modal(
               document.getElementById("transactionModal")
-            );
-            modal.show();
+            ).show();
+            populateTransactionForm();
           });
+
+        // ✅ FORM SUBMIT: Member Registration
+        document
+          .getElementById("registerMemberForm")
+          ?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            formData.append("action", "register");
+
+            try {
+              const res = await fetch(
+                "https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec",
+                {
+                  method: "POST",
+                  body: formData,
+                }
+              );
+              const result = await res.json();
+
+              if (result.success) {
+                Swal.fire("Success", result.message, "success");
+                form.reset();
+                generateMemberID();
+              } else {
+                Swal.fire("Error", result.message, "error");
+              }
+            } catch (err) {
+              console.error(err);
+              Swal.fire("Error", "Network error occurred", "error");
+            }
+          });
+
+        // ✅ FORM SUBMIT: Record Transaction
+        document
+          .getElementById("recordTransactionForm")
+          ?.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            formData.append("action", "recordTransaction");
+
+            try {
+              const res = await fetch(
+                "https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec",
+                {
+                  method: "POST",
+                  body: formData,
+                }
+              );
+              const result = await res.json();
+
+              if (result.success) {
+                Swal.fire("Success", result.message, "success");
+                form.reset();
+              } else {
+                Swal.fire("Error", result.message, "error");
+              }
+            } catch (err) {
+              console.error(err);
+              Swal.fire("Error", "Network error occurred", "error");
+            }
+          });
+
+        // ✅ Populate Street Dropdown (for Member form)
+        populateStreetDropdown();
+        generateMemberID();
+
+        // ✅ Address Autogeneration
+        const houseInput = document.querySelector("input[name='houseNumber']");
+        const streetSelect = document.querySelector(
+          "select[name='streetName']"
+        );
+        const addressOutput = document.querySelector(
+          "input[name='residentialAddress']"
+        );
+
+        function updateAddress() {
+          const house = houseInput?.value || "";
+          const street = streetSelect?.value || "";
+          if (addressOutput) addressOutput.value = `${house} ${street}`.trim();
+        }
+
+        houseInput?.addEventListener("input", updateAddress);
+        streetSelect?.addEventListener("change", updateAddress);
+
+        // ✅ Duration Calculation
+        document
+          .getElementById("fromMonth")
+          ?.addEventListener("change", calculateDuration);
+        document
+          .getElementById("toMonth")
+          ?.addEventListener("change", calculateDuration);
+
+        function calculateDuration() {
+          const fromVal = document.getElementById("fromMonth")?.value;
+          const toVal = document.getElementById("toMonth")?.value;
+          const durationField = document.getElementById("durationMonths");
+
+          if (fromVal && toVal && durationField) {
+            const fromDate = new Date(fromVal);
+            const toDate = new Date(toVal);
+            const months =
+              (toDate.getFullYear() - fromDate.getFullYear()) * 12 +
+              (toDate.getMonth() - fromDate.getMonth()) +
+              1;
+            durationField.value = months > 0 ? months : 0;
+          }
+        }
+
+        // ✅ Member ID Generation
+        async function generateMemberID() {
+          try {
+            const res = await fetch(
+              "https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec?generateId=true"
+            );
+            const newId = await res.text();
+            const idField = document.querySelector("input[name='memberId']");
+            if (idField) idField.value = newId;
+          } catch (err) {
+            console.error("Failed to generate member ID:", err);
+          }
+        }
+
+        // ✅ Street Dropdown
+        async function populateStreetDropdown() {
+          try {
+            const res = await fetch(
+              "https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec"
+            );
+            const streets = await res.json();
+            const select = document.querySelector("select[name='streetName']");
+            if (!select) return;
+
+            select.innerHTML = '<option value="">Select Street</option>';
+            streets.forEach((street) => {
+              const opt = document.createElement("option");
+              opt.value = street;
+              opt.textContent = street;
+              select.appendChild(opt);
+            });
+          } catch (err) {
+            console.error("Failed to load street names:", err);
+          }
+        }
+
+        // ✅ Transaction Form Setup
+        async function populateTransactionForm() {
+          const txnId = document.getElementById("transactionId");
+          const txnDate = document.getElementById("transactionDate");
+          const recBy = document.getElementById("recordedBy");
+          if (txnId) txnId.value = `TXN-${Date.now()}`;
+          if (txnDate) txnDate.value = new Date().toLocaleString();
+          if (recBy) recBy.value = getAdminUsername();
+
+          await populateResidentialAddresses();
+          await populateDropdown("paymentPurpose", 1);
+          await populateDropdown("paymentType", 2);
+        }
+
+        async function populateResidentialAddresses() {
+          try {
+            const res = await fetch(
+              "https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec?action=getAddresses"
+            );
+            const data = await res.json();
+            const select = document.getElementById("residentialAddress");
+            if (!select) return;
+
+            select.innerHTML = '<option value="">Select Address</option>';
+            data.forEach((row) => {
+              const opt = document.createElement("option");
+              opt.value = row.address;
+              opt.textContent = row.address;
+              select.appendChild(opt);
+            });
+
+            select.addEventListener("change", () => {
+              const selected = select.value;
+              const match = data.find((row) => row.address === selected);
+              if (match) {
+                const idField = document.getElementById("memberId");
+                if (idField) idField.value = match.memberId;
+              }
+            });
+          } catch (err) {
+            console.error("Failed to load residential addresses:", err);
+          }
+        }
+
+        async function populateDropdown(fieldId, columnIndex) {
+          try {
+            const res = await fetch(
+              `https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec?action=settingsColumn&col=${columnIndex}`
+            );
+            const values = await res.json();
+            const select = document.getElementById(fieldId);
+            if (!select) return;
+
+            select.innerHTML = '<option value="">Select</option>';
+            values.forEach((val) => {
+              const opt = document.createElement("option");
+              opt.value = val;
+              opt.textContent = val;
+              select.appendChild(opt);
+            });
+          } catch (err) {
+            console.error(`Failed to populate ${fieldId}:`, err);
+          }
+        }
       });
     </script>
+    <script type="module" src="./js/dashboard.js"></script>
   </body>
 </html>
