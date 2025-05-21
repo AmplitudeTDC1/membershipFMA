@@ -560,3 +560,145 @@ function setupTableRowSelection() {
     });
   });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const historicalBtn = document.getElementById("historical-btn");
+  const historicalTable = document.getElementById("historical-table-body");
+
+  if (historicalBtn) {
+    historicalBtn.addEventListener("click", async function () {
+      try {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec?action=getHistoricalPayments");
+        const data = await res.json();
+
+        historicalTable.innerHTML = "";
+
+        if (!Array.isArray(data)) {
+          historicalTable.innerHTML = `<tr><td colspan="10" class="text-danger">No data found or error loading data</td></tr>`;
+          return;
+        }
+
+        data.forEach((item) => {
+          historicalTable.innerHTML += `
+            <tr>
+              <td>${item.memberId}</td>
+              <td>${item.fullName}</td>
+              <td>${item.address}</td>
+              <td>${item.year}</td>
+              <td>₦${item.monthlyRate.toLocaleString()}</td>
+              <td>₦${item.expectedPayment.toLocaleString()}</td>
+              <td>₦${item.actualPayment.toLocaleString()}</td>
+              <td>${item.discountApplied ? "Yes" : "No"}</td>
+              <td class="text-danger">₦${item.outstanding.toLocaleString()}</td>
+              <td><button class="btn btn-sm btn-outline-primary" onclick="printMemberSummary('${item.memberId}')">Print</button></td>
+            </tr>
+          `;
+        });
+
+        setupHistoricalSearch(); // Activate search
+        const modal = new bootstrap.Modal(document.getElementById("historicalPaymentModal"));
+        modal.show();
+
+      } catch (err) {
+        console.error("Error loading historical summary:", err);
+        historicalTable.innerHTML = `<tr><td colspan="10" class="text-danger">Error loading data</td></tr>`;
+      }
+    });
+  }
+});
+
+function setupHistoricalSearch() {
+  const input = document.getElementById("historicalSearch");
+  const rows = document.querySelectorAll("#historical-table-body tr");
+
+  input.addEventListener("input", () => {
+    const term = input.value.toLowerCase();
+    rows.forEach((row) => {
+      row.style.display = row.innerText.toLowerCase().includes(term) ? "" : "none";
+    });
+  });
+}
+
+async function printMemberSummary(memberId) {
+  try {
+    const res = await fetch("https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec?action=getHistoricalPayments");
+    const data = await res.json();
+
+    const memberData = data.filter(d => d.memberId === memberId);
+    if (!memberData.length) return alert("No data for this member.");
+
+    const { fullName, address } = memberData[0];
+    const totalPaid = memberData.reduce((sum, row) => sum + row.actualPayment, 0);
+    const totalOutstanding = memberData.reduce((sum, row) => sum + row.outstanding, 0);
+
+    const resTxn = await fetch("https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec?action=getTransactions");
+    const txns = await resTxn.json();
+    const memberTxns = txns
+      .filter(t => t.memberId === memberId && (t.paymentPurpose || "").toLowerCase().includes("monthly"))
+      .sort((a, b) => new Date(b.transactionDate) - new Date(a.transactionDate))
+      .slice(0, 5);
+
+    const win = window.open("", "", "width=900,height=700");
+    win.document.write(`
+      <html><head><title>Member Summary</title>
+      <style>
+        body { font-family: Arial; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #aaa; padding: 8px; }
+        th { background-color: #eee; }
+      </style>
+      </head><body>
+        <h2>Historical Payment Summary for ${fullName}</h2>
+        <p><strong>ID:</strong> ${memberId}<br><strong>Address:</strong> ${address}</p>
+        <h4>Yearly Summary</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Year</th><th>Monthly</th><th>Expected</th><th>Paid</th><th>Discount</th><th>Outstanding</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${memberData.map(r => `
+              <tr>
+                <td>${r.year}</td>
+                <td>₦${r.monthlyRate.toLocaleString()}</td>
+                <td>₦${r.expectedPayment.toLocaleString()}</td>
+                <td>₦${r.actualPayment.toLocaleString()}</td>
+                <td>${r.discountApplied ? "Yes" : "No"}</td>
+                <td>₦${r.outstanding.toLocaleString()}</td>
+              </tr>`).join("")}
+          </tbody>
+        </table>
+
+        <h4>Last 5 Monthly Dues Payments</h4>
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Amount</th><th>Type</th><th>From</th><th>To</th></tr>
+          </thead>
+          <tbody>
+            ${memberTxns.map(txn => `
+              <tr>
+                <td>${new Date(txn.transactionDate).toLocaleDateString()}</td>
+                <td>₦${Number(txn.amount).toLocaleString()}</td>
+                <td>${txn.paymentType}</td>
+                <td>${txn.fromMonth || "-"}</td>
+                <td>${txn.toMonth || "-"}</td>
+              </tr>`).join("")}
+          </tbody>
+        </table>
+
+        <h4>Total Paid: ₦${totalPaid.toLocaleString()}</h4>
+        <h4>Total Outstanding: ₦${totalOutstanding.toLocaleString()}</h4>
+        <br><small>Printed on ${new Date().toLocaleString()}</small>
+        <script>window.print()</script>
+      </body></html>
+    `);
+    win.document.close();
+  } catch (err) {
+    console.error("Error printing summary:", err);
+    alert("Could not generate print view.");
+  }
+}
+
+window.printMemberSummary = printMemberSummary;
+
