@@ -681,7 +681,7 @@
 
             try {
               const res = await fetch(
-                "https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec",
+                "https://script.google.com/macros/s/AKfycbwYU23IshRGO0hYFhnGlaTY0MeACE7v9baJMcjGY9Wu8stUiyOLCE-onr1Oi-aPcO0j/exec",
                 {
                   method: "POST",
                   body: formData,
@@ -713,7 +713,7 @@
 
             try {
               const res = await fetch(
-                "https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec",
+                "https://script.google.com/macros/s/AKfycbwYU23IshRGO0hYFhnGlaTY0MeACE7v9baJMcjGY9Wu8stUiyOLCE-onr1Oi-aPcO0j/exec",
                 {
                   method: "POST",
                   body: formData,
@@ -783,7 +783,7 @@
         async function generateMemberID() {
           try {
             const res = await fetch(
-              "https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec?generateId=true"
+              "https://script.google.com/macros/s/AKfycbwYU23IshRGO0hYFhnGlaTY0MeACE7v9baJMcjGY9Wu8stUiyOLCE-onr1Oi-aPcO0j/exec/?generateId=true"
             );
             const newId = await res.text();
             const idField = document.querySelector("input[name='memberId']");
@@ -832,7 +832,7 @@
         async function populateResidentialAddresses() {
           try {
             const res = await fetch(
-              "https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec?action=getAddresses"
+              "https://script.google.com/macros/s/AKfycbwYU23IshRGO0hYFhnGlaTY0MeACE7v9baJMcjGY9Wu8stUiyOLCE-onr1Oi-aPcO0j/exec?action=getAddresses"
             );
             const data = await res.json();
             const select = document.getElementById("residentialAddress");
@@ -862,7 +862,7 @@
         async function populateDropdown(fieldId, columnIndex) {
           try {
             const res = await fetch(
-              `https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec?action=settingsColumn&col=${columnIndex}`
+              `https://script.google.com/macros/s/AKfycbwYU23IshRGO0hYFhnGlaTY0MeACE7v9baJMcjGY9Wu8stUiyOLCE-onr1Oi-aPcO0j/exec?action=settingsColumn&col=${columnIndex}`
             );
             const values = await res.json();
             const select = document.getElementById(fieldId);
