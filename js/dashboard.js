@@ -72,7 +72,7 @@ function setupFormSubmissions() {
 
       try {
         const res = await fetch(
-          "https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec",
+          "https://script.google.com/macros/s/AKfycbwYU23IshRGO0hYFhnGlaTY0MeACE7v9baJMcjGY9Wu8stUiyOLCE-onr1Oi-aPcO0j/exec",
           { method: "POST", body: formData }
         );
         const result = await res.json();
