@@ -1,7 +1,8 @@
 // /js/auth.js
 
+
 // Show alert if user is not admin and open the modal if access is granted
-export function notAdminAlert(modalId) {
+function notAdminAlert(modalId) {
   if (!isAdminLoggedIn()) {
     Swal.fire({
       icon: "warning",
@@ -22,17 +23,17 @@ export function notAdminAlert(modalId) {
 }
 
 // Show admin login modal
-export function showLogin() {
+function showLogin() {
   document.getElementById("admin-login-modal").style.display = "flex";
 }
 
 // Hide admin login modal
-export function closeLoginModal() {
+function closeLoginModal() {
   document.getElementById("admin-login-modal").style.display = "none";
 }
 
 // Handle admin login
-export function adminLogin() {
+function adminLogin() {
   const username = document.getElementById("admin-username").value;
   const password = document.getElementById("admin-password").value;
 
@@ -42,7 +43,7 @@ export function adminLogin() {
   data.append("password", password);
 
   fetch(
-    "https://script.google.com/macros/s/AKfycbwS9r6xURHwfYyko3v80ZMLdQE5OpslvQINtGlRCGnQuiaR4gw-JsexFJuZdn2eMcYE/exec",
+    API_BASE_URL,
     {
       method: "POST",
       headers: {
@@ -54,7 +55,7 @@ export function adminLogin() {
     .then((res) => res.json())
     .then((response) => {
       if (response.success) {
-        setAdminSession();
+        setAdminSession(response.data ? response.data.token : "");
         localStorage.setItem("adminUsername", username);
 
         Swal.fire({
@@ -84,12 +85,12 @@ export function adminLogin() {
 }
 
 // Get stored admin username (optional)
-export function getAdminUsername() {
+function getAdminUsername() {
   return localStorage.getItem("adminUsername") || "Admin";
 }
 
 // Check if admin session is valid
-export function isAdminLoggedIn() {
+function isAdminLoggedIn() {
   try {
     const sessionData = JSON.parse(localStorage.getItem("adminSession"));
     if (!sessionData) return false;
@@ -102,7 +103,7 @@ export function isAdminLoggedIn() {
 }
 
 // Logout admin
-export function logoutAdmin() {
+function logoutAdmin() {
   // Show SweetAlert logout success
   Swal.fire({
     icon: "success",
@@ -123,16 +124,17 @@ export function logoutAdmin() {
 // Set admin session with expiration
 const SESSION_DURATION = 30 * 60 * 1000; // 30 minutes
 
-export function setAdminSession() {
+function setAdminSession(token) {
   const session = {
     role: "admin",
     loginTime: Date.now(),
     expiresIn: SESSION_DURATION,
+    token: token || ""
   };
   localStorage.setItem("adminSession", JSON.stringify(session));
 }
 
-export function refreshAdminSessionOnActivity() {
+function refreshAdminSessionOnActivity() {
   const activityEvents = ["click", "keydown", "mousemove", "scroll"];
   activityEvents.forEach((event) =>
     document.addEventListener(event, () => {
@@ -146,7 +148,7 @@ export function refreshAdminSessionOnActivity() {
 }
 
 // Check if session expired and auto-logout
-export function checkSessionExpiry() {
+function checkSessionExpiry() {
   try {
     const sessionData = JSON.parse(localStorage.getItem("adminSession"));
     if (sessionData) {
@@ -162,3 +164,4 @@ export function checkSessionExpiry() {
 
 // Optional: Call this at regular intervals
 setInterval(checkSessionExpiry, 60 * 1000); // Check every minute
+
