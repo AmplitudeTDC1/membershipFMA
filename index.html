@@ -3,8 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ALESE CDA Finance Manager</title>
+    <title>THE INTEGRATED CDA Finance Manager</title>
     <link rel="stylesheet" href="./css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+    />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
   </head>
 
@@ -16,18 +20,10 @@
         <h1 class="brand-name">ALESE CDA</h1>
       </div>
       <div class="topbar">
-        <h2 id="admin-welcome" style="display: none"></h2>
         <div class="nav-links actions">
-          <button
-            class="btn"
-            onclick="handleAdminAction('register-member-modal')"
-          >
-            Register New Member
+          <button class="btn btn-admin" onclick="showLogin()">
+            Admin Login
           </button>
-          <button class="btn" onclick="handleAdminAction('transaction-modal')">
-            Record a Transaction
-          </button>
-          <button class="btn" onclick="logoutAdmin()">Logout</button>
         </div>
       </div>
     </nav>
@@ -37,7 +33,8 @@
       <div class="hero-overlay">
         <h2>Empowering Our Community Through Transparency and Service</h2>
         <p>
-          Track CDA levies, donations, and special projects with ease and trust.
+          Track CDA levies, donations, and special projects funding with ease
+          and trust.
         </p>
       </div>
     </header>
@@ -56,24 +53,23 @@
       <!-- Contact Us -->
       <section class="contact-us" aria-labelledby="contact-title">
         <h3 id="contact-title">Contact Us</h3>
-        <p>Email: <a href="mailto:info@alese-cda.org">info@alese-cda.org</a></p>
-        <p>Phone: <a href="tel:+2348001234567">+234 800 123 4567</a></p>
+        <p>
+          Email:
+          <a href="mailto:amplitudenigeria@gmail.com"
+            >amplitudenigeria@gmail.com</a
+          >
+        </p>
+        <p>Phone: <a href="tel:+2348142877308">+234 814 287 7308</a></p>
       </section>
     </main>
 
     <!-- Footer -->
     <footer class="footer">
-      <p>&copy; 2025 ALESE CDA. All rights reserved.</p>
+      <p>&copy; 2026 ALESE CDA. All rights reserved.</p>
       <div class="social-icons">
-        <a href="#" aria-label="Facebook"
-          ><img src="images/facebook.png" alt="Facebook"
-        /></a>
-        <a href="#" aria-label="WhatsApp"
-          ><img src="images/whatsapp.png" alt="WhatsApp"
-        /></a>
-        <a href="#" aria-label="Instagram"
-          ><img src="images/instagram.png" alt="Instagram"
-        /></a>
+        <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+        <a href="#" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+        <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
       </div>
     </footer>
 
@@ -110,126 +106,27 @@
       </div>
     </div>
 
-    <!-- Register Member Modal -->
-    <div
-      id="register-member-modal"
-      class="modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="register-member-title"
-    >
-      <div class="modal-content">
-        <span
-          class="close"
-          onclick="closeModal('register-member-modal')"
-          role="button"
-          aria-label="Close Register Modal"
-          >&times;</span
-        >
-        <h2 id="register-member-title">Register New Member</h2>
-        <form id="register-member-form">
-          <input
-            type="text"
-            id="member-name"
-            placeholder="Full Name"
-            required
-          />
-          <input type="email" id="member-email" placeholder="Email" required />
-          <input
-            type="text"
-            id="member-phone"
-            placeholder="Phone Number"
-            required
-          />
-          <button type="submit" class="btn">Register</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Transaction Modal -->
-    <div
-      id="transaction-modal"
-      class="modal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="transaction-title"
-    >
-      <div class="modal-content">
-        <span
-          class="close"
-          onclick="closeModal('transaction-modal')"
-          role="button"
-          aria-label="Close Transaction Modal"
-          >&times;</span
-        >
-        <h2 id="transaction-title">Record a Transaction</h2>
-        <form id="record-transaction-form">
-          <input
-            type="text"
-            id="transaction-member-name"
-            placeholder="Member Name"
-            required
-          />
-          <input
-            type="number"
-            id="transaction-amount"
-            placeholder="Amount"
-            required
-          />
-          <select id="transaction-type" required>
-            <option value="">Select Type</option>
-            <option value="levy">Levy</option>
-            <option value="donation">Donation</option>
-            <option value="project">Project</option>
-          </select>
-          <button type="submit" class="btn">Submit</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- App Script -->
-    <script type="module">
-      import {
-        notAdminAlert,
-        showLogin,
-        closeLoginModal,
-        adminLogin,
-        isAdminLoggedIn,
-        getAdminUsername,
-        logoutAdmin,
-        refreshAdminSessionOnActivity,
-      } from "./js/auth.js";
-
+    <!-- App Scripts -->
+    <script src="./js/config.js?v=1.1.3"></script>
+    <script src="./js/auth.js?v=1.1.3"></script>
+    <script>
       // Expose globally
-      window.notAdminAlert = notAdminAlert;
       window.showLogin = showLogin;
       window.closeLoginModal = closeLoginModal;
       window.adminLogin = adminLogin;
       window.logoutAdmin = logoutAdmin;
-
-      window.handleAdminAction = function (modalId) {
-        notAdminAlert(modalId);
-      };
 
       window.addEventListener("DOMContentLoaded", () => {
         document
           .getElementById("login-submit")
           .addEventListener("click", () => adminLogin());
 
+        // Close modal when clicking X
         document.querySelectorAll(".modal .close").forEach((el) =>
           el.addEventListener("click", () => {
             el.closest(".modal").style.display = "none";
           })
         );
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const actionType = urlParams.get("action");
-        if (actionType === "register") {
-          document.getElementById("register-member-modal").style.display =
-            "block";
-        } else if (actionType === "transaction") {
-          document.getElementById("transaction-modal").style.display = "block";
-        }
       });
     </script>
   </body>
