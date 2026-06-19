@@ -55,7 +55,9 @@ function adminLogin() {
     .then((res) => res.json())
     .then((response) => {
       if (response.success) {
-        setAdminSession(response.data ? response.data.token : "");
+        const token = response.data ? response.data.token : "";
+        const role = response.data ? response.data.role : "admin";
+        setAdminSession(token, role);
         localStorage.setItem("adminUsername", username);
 
         Swal.fire({
@@ -124,9 +126,9 @@ function logoutAdmin() {
 // Set admin session with expiration
 const SESSION_DURATION = 30 * 60 * 1000; // 30 minutes
 
-function setAdminSession(token) {
+function setAdminSession(token, role) {
   const session = {
-    role: "admin",
+    role: role || "admin",
     loginTime: Date.now(),
     expiresIn: SESSION_DURATION,
     token: token || ""
