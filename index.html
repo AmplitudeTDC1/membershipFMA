@@ -3,7 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>THE INTEGRATED CDA Finance Manager</title>
+    <title>ALESE CDA Finance Manager</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./css/style.css" />
     <link
       rel="stylesheet"
@@ -16,13 +18,15 @@
     <!-- Navbar -->
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="logo-section">
-        <img src="./assets/logo.png" alt="ALESE CDA Logo" class="logo" />
+        <div class="logo-circle">
+          <i class="bi bi-shield-shaded"></i>
+        </div>
         <h1 class="brand-name">ALESE CDA</h1>
       </div>
       <div class="topbar">
         <div class="nav-links actions">
           <button class="btn btn-admin" onclick="showLogin()">
-            Admin Login
+            <i class="bi bi-person-fill-lock"></i> Admin Login
           </button>
         </div>
       </div>
@@ -31,45 +35,138 @@
     <!-- Hero Section -->
     <header class="hero">
       <div class="hero-overlay">
-        <h2>Empowering Our Community Through Transparency and Service</h2>
-        <p>
-          Track CDA levies, donations, and special projects funding with ease
-          and trust.
-        </p>
+        <div class="hero-content">
+          <span class="badge">Alese Community Development Association</span>
+          <h2>Empowering Our Community Through Transparency and Service</h2>
+          <p>
+            Track CDA levies, developmental dues, donations, and special projects funding with absolute clarity and trust.
+          </p>
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-lg" onclick="showLogin()">
+              Access Finance Manager <i class="bi bi-arrow-right-short"></i>
+            </button>
+          </div>
+        </div>
       </div>
     </header>
 
     <!-- Main Content -->
     <main>
-      <!-- Announcements -->
-      <section class="announcements" aria-labelledby="announcements-title">
-        <h3 id="announcements-title">Community Announcements</h3>
-        <ul>
-          <li>🎉 Town Hall Meeting on Saturday 10th</li>
-          <li>🛠 Special Project: Road Repairs begin next week</li>
-        </ul>
+      <!-- Features Section -->
+      <section class="features-section" aria-labelledby="features-title">
+        <div class="section-header">
+          <span class="sub-title">System Capabilities</span>
+          <h2 id="features-title">Designed for Community Accountability</h2>
+          <p>A comprehensive administrative tool to streamline financial management and communications.</p>
+        </div>
+        
+        <div class="features-grid">
+          <!-- Card 1 -->
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-people-fill"></i>
+            </div>
+            <h4>Member Management</h4>
+            <p>Register and manage resident profiles, addresses, and contacts in a centralized system with smart duplicate prevention.</p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-cash-stack"></i>
+            </div>
+            <h4>Secure Ledger</h4>
+            <p>Record and monitor developmental dues, levies, donations, and projects with precise date-range coverage and recorder tracking.</p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-chat-left-text-fill"></i>
+            </div>
+            <h4>Smart Receipting</h4>
+            <p>Deliver digital payment receipts to residents instantly via professional HTML email, WhatsApp message, or direct browser print.</p>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-pie-chart-fill"></i>
+            </div>
+            <h4>Analytics & Reports</h4>
+            <p>Monitor project balances, analyze transaction trends, and export detailed CSV reports for community auditing.</p>
+          </div>
+        </div>
       </section>
 
-      <!-- Contact Us -->
-      <section class="contact-us" aria-labelledby="contact-title">
-        <h3 id="contact-title">Contact Us</h3>
-        <p>
-          Email:
-          <a href="mailto:amplitudenigeria@gmail.com"
-            >amplitudenigeria@gmail.com</a
-          >
-        </p>
-        <p>Phone: <a href="tel:+2348142877308">+234 814 287 7308</a></p>
-      </section>
+      <!-- Two-Column Grid for Announcements & Contact -->
+      <div class="info-grid">
+        <!-- Announcements -->
+        <section class="announcements-section" aria-labelledby="announcements-title">
+          <div class="card-header-icon">
+            <i class="bi bi-megaphone-fill"></i>
+            <h3 id="announcements-title">Community Updates</h3>
+          </div>
+          <div class="announcements-list">
+            <div class="announcement-item">
+              <div class="announcement-date">
+                <span class="day">10</span>
+                <span class="month">JUN</span>
+              </div>
+              <div class="announcement-content">
+                <h5>Town Hall General Meeting</h5>
+                <p>Discussing road infrastructure levy and upcoming maintenance schedules. Attendance is highly encouraged.</p>
+              </div>
+            </div>
+            <div class="announcement-item">
+              <div class="announcement-date">
+                <span class="day">18</span>
+                <span class="month">JUN</span>
+              </div>
+              <div class="announcement-content">
+                <h5>Special Project Launch</h5>
+                <p>Developmental road repairs project begins next week. Levies can be paid via the Admin Dashboard.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Contact Us -->
+        <section class="contact-section" aria-labelledby="contact-title">
+          <div class="card-header-icon">
+            <i class="bi bi-envelope-fill"></i>
+            <h3 id="contact-title">Get In Touch</h3>
+          </div>
+          <p class="contact-desc">Have questions regarding payments, registration, or system access? Contact the administrative team.</p>
+          <div class="contact-methods">
+            <a href="mailto:amplitudenigeria@gmail.com" class="contact-method-card">
+              <i class="bi bi-envelope-at-fill"></i>
+              <div>
+                <span class="label">Email Address</span>
+                <span class="value">amplitudenigeria@gmail.com</span>
+              </div>
+            </a>
+            <a href="tel:+2348142877308" class="contact-method-card">
+              <i class="bi bi-telephone-fill"></i>
+              <div>
+                <span class="label">Phone Support</span>
+                <span class="value">+234 814 287 7308</span>
+              </div>
+            </a>
+          </div>
+        </section>
+      </div>
     </main>
 
     <!-- Footer -->
     <footer class="footer">
-      <p>&copy; 2026 ALESE CDA. All rights reserved.</p>
-      <div class="social-icons">
-        <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-        <a href="#" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
-        <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+      <div class="footer-content">
+        <p>&copy; 2026 ALESE CDA. All rights reserved. Empowering community growth through transparency.</p>
+        <div class="social-icons">
+          <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+          <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+        </div>
       </div>
     </footer>
 
@@ -89,20 +186,34 @@
           aria-label="Close Login Modal"
           >&times;</span
         >
-        <h2 id="admin-login-title">Admin Sign In</h2>
-        <input
-          type="text"
-          id="admin-username"
-          placeholder="Username"
-          required
-        />
-        <input
-          type="password"
-          id="admin-password"
-          placeholder="Password"
-          required
-        />
-        <button id="login-submit" class="btn">Login</button>
+        <div class="modal-header">
+          <h2 id="admin-login-title">Admin Sign In</h2>
+        </div>
+        <p class="modal-subtitle">Log in to manage community finances and member directories.</p>
+        
+        <div class="input-group">
+          <span class="input-icon"><i class="bi bi-person"></i></span>
+          <input
+            type="text"
+            id="admin-username"
+            placeholder="Username"
+            required
+          />
+        </div>
+        
+        <div class="input-group">
+          <span class="input-icon"><i class="bi bi-lock"></i></span>
+          <input
+            type="password"
+            id="admin-password"
+            placeholder="Password"
+            required
+          />
+        </div>
+        
+        <button id="login-submit" class="btn btn-submit">
+          Sign In <i class="bi bi-box-arrow-in-right"></i>
+        </button>
       </div>
     </div>
 
